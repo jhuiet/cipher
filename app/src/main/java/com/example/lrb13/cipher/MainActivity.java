@@ -37,9 +37,10 @@ public class MainActivity extends Activity {
     int position;
     int i = 0;
     String input;
-    String result;
+    String result = "";
     int length;
     int p;
+    String strn;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -102,42 +103,45 @@ public class MainActivity extends Activity {
     public void RunOnClick(View v) {
         result = "";
         input = in.getText().toString();
+        strn = n.getText().toString();
         length = input.length();
         if (p == 0) { //ngraph
-
-            nGraph();
+            output.setText(nGraph());
 
         } else if (p == 1) {//run the alphabet
-            runTheAlphabet();
+            output.setText(runTheAlphabet());
         }
         else if (p==2) { //index of coincidence
-            indexOfCoincidence();
+            output.setText(indexOfCoincidence());
 
         }
         else if (p==3)
         { //caesar
-            caesar();
+            output.setText(caesar());
+           // caesar();
         }
         else if (p==4)
         { //frequency
-            frequency();
+            output.setText(frequency());
+            //frequency();
 
 
         }
-        else if (p==5)
+        else if (p==5)  //todo use this as a precedence for the rest of the code
         { //multiplicative
-            multiplicative();
+            output.setText(multiplicative());
         }
 
         else if (p==6)
         {
-           affine();
+           output.setText(affine());
         }
     }
 
-    private void nGraph() {
-        size = Integer.parseInt(n.getText().toString());
 
+    public String nGraph() {
+        String result = "";
+        size = Integer.parseInt(strn);;
         if(size<1){ //size is the result of text field i need to create (n)
             size=1;
         }//end if
@@ -178,10 +182,11 @@ public class MainActivity extends Activity {
             }
             //end for loop
         }//end if
-        output.setText(result);
+        return result;
     }
 
-    private void runTheAlphabet() {
+    public String runTheAlphabet() {
+        String result = "";
         input = input.toLowerCase();
         for (int j = 0; j <= 25; j++) {
             for (int i = 0; i < input.length(); i++) {
@@ -200,10 +205,11 @@ public class MainActivity extends Activity {
             }
             result = result + "\n";
             }
-        output.setText(result);
+        return result;
     }
 
-    private void indexOfCoincidence() {
+    public String indexOfCoincidence() {
+        result = "";
         //create array to store count in a=0,b=1...
         int array[]=new int[26];
 
@@ -212,7 +218,7 @@ public class MainActivity extends Activity {
         input=input.toLowerCase();
         input=input.replaceAll("[^A-Za-z]+","");
         if(input.length()<=1){
-            output.setText("NA");
+            result = "NA";
         }//end if
 
         else{
@@ -237,12 +243,14 @@ public class MainActivity extends Activity {
             double num=(double) numerator;
             double den=(double) denominator;
             double index = num/den;
-            output.setText("" + index);
+            result = ("" + index);
         }//end else
+        return result;
     }
 
-    private void caesar() {
-        caesarIndex = n.getText().toString();
+    public String caesar() {
+        String result = "";
+        caesarIndex = strn;
         size = getIndex(caesarIndex);
         input = input.toLowerCase();
         for (int i = 0; i < input.length(); i++) {
@@ -259,10 +267,11 @@ public class MainActivity extends Activity {
                 result = result + " ";
             }
         }
-        output.setText(result);
+        return result;
     }
 
-    private void frequency() {
+    public String frequency() {
+        String result = "";
         //remove spaces and special characters from string
         input=input.replaceAll(" ","");
         input=input.toLowerCase();
@@ -277,7 +286,7 @@ public class MainActivity extends Activity {
             array[position]=array[position]+1;
         }//end for loop
 
-        String result="";
+        result="";
         //loop through array and put the results into a single string
         for(int i=0;i<26;i++){
 
@@ -289,17 +298,19 @@ public class MainActivity extends Activity {
             }//end for
             result=result + l + " = " + array[i] + " = " + I + "\n";
         }//end for
-        output.setText(result);
+        return result;
     }
 
-    private void multiplicative() {
+    public String multiplicative() {
+        String result = "";
         int value = p2;
-
+        int count = 0;
         input=input.replaceAll(" ","");
         input=input.toLowerCase();
         input=input.replaceAll("[^A-Za-z]+","");
 
         for (int i = 0; i < input.length(); i++) {
+            count++;
             int charInt = (int)input.charAt(i);
             if ((charInt >= 97 && charInt <= 122)) {
                 charInt = charInt - 96;
@@ -314,17 +325,22 @@ public class MainActivity extends Activity {
             else {
                 result = result + (' ');
             }
+            if(count == 5){
+                result = result + " ";
+                count = 0;
+            }
         }
-        output.setText(result);
+        return result;
+        //output.setText(result);
     }
 
-    public void affine()
+    public String affine()
     {
-
+        String result = "";
         input = input.toLowerCase();
         result = multiplicative2(input, p2);
         result = caesar2(result, length);
-        output.setText(result);
+        return result;
     }
 
     public static String caesar2(String input, int index) {
